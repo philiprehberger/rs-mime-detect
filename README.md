@@ -1,12 +1,16 @@
 # rs-mime-detect
 
-File type detection from content (magic bytes), file extension, and MIME type mapping.
+[![CI](https://github.com/philiprehberger/rs-mime-detect/actions/workflows/ci.yml/badge.svg)](https://github.com/philiprehberger/rs-mime-detect/actions/workflows/ci.yml)
+[![Crates.io](https://img.shields.io/crates/v/philiprehberger-mime-detect.svg)](https://crates.io/crates/philiprehberger-mime-detect)
+[![License](https://img.shields.io/github/license/philiprehberger/rs-mime-detect)](LICENSE)
+
+File type detection from content (magic bytes), file extension, and MIME type mapping
 
 ## Installation
 
 ```toml
 [dependencies]
-philiprehberger-mime-detect = "0.1"
+philiprehberger-mime-detect = "0.1.0"
 ```
 
 ## Usage
@@ -38,19 +42,6 @@ assert_eq!(mime_to_extension("image/png"), Some("png"));
 assert_eq!(extension_to_mime("html"), Some("text/html"));
 ```
 
-## Supported formats
-
-100+ file types including:
-- **Images:** JPEG, PNG, GIF, BMP, WebP, TIFF, ICO, AVIF
-- **Video:** MP4, AVI, MKV/WebM
-- **Audio:** MP3, WAV, FLAC, OGG, MIDI
-- **Documents:** PDF, ZIP, GZIP
-- **Archives:** RAR, 7Z, TAR, BZIP2, XZ, ZSTD
-- **Fonts:** WOFF, WOFF2, OTF, TTF
-- **Executables:** ELF, PE/EXE, Mach-O, WASM
-- **Text:** HTML, CSS, JS, JSON, XML, Markdown, YAML, TOML
-- **Code:** Rust, Python, Go, TypeScript
-
 ## API
 
 | Function | Description |
@@ -61,6 +52,13 @@ assert_eq!(extension_to_mime("html"), Some("text/html"));
 | `detect_from_reader(reader, limit)` | Detect from a reader |
 | `mime_to_extension(mime)` | Get default extension for MIME type |
 | `extension_to_mime(ext)` | Get MIME type for extension |
+
+## Development
+
+```bash
+cargo test
+cargo clippy -- -D warnings
+```
 
 ## License
 
