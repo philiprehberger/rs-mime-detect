@@ -3,6 +3,7 @@
 [![CI](https://github.com/philiprehberger/rs-mime-detect/actions/workflows/ci.yml/badge.svg)](https://github.com/philiprehberger/rs-mime-detect/actions/workflows/ci.yml)
 [![Crates.io](https://img.shields.io/crates/v/philiprehberger-mime-detect.svg)](https://crates.io/crates/philiprehberger-mime-detect)
 [![License](https://img.shields.io/github/license/philiprehberger/rs-mime-detect)](LICENSE)
+[![Sponsor](https://img.shields.io/badge/sponsor-GitHub%20Sponsors-ec6cb9)](https://github.com/sponsors/philiprehberger)
 
 File type detection from content (magic bytes), file extension, and MIME type mapping
 
