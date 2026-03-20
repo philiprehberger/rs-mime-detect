@@ -1,0 +1,12 @@
+# Changelog
+
+## 0.1.0 (2026-03-19)
+
+- Initial release
+- Detect file type from content bytes (magic number matching)
+- Detect file type from file extension
+- Combined detection (content priority, extension fallback)
+- 100+ supported file types across images, video, audio, documents, archives, fonts
+- MIME type to extension and extension to MIME type mapping
+- FileKind categorization (Image, Video, Audio, Document, Archive, Font, Executable, Other)
+- Streaming detection from reader
