@@ -2,9 +2,12 @@
 name = "philiprehberger-mime-detect"
 version = "0.1.0"
 edition = "2021"
+rust-version = "1.70"
 authors = ["Philip Rehberger"]
 description = "File type detection from content (magic bytes), file extension, and MIME type mapping"
 license = "MIT"
+readme = "README.md"
 repository = "https://github.com/philiprehberger/rs-mime-detect"
+documentation = "https://docs.rs/philiprehberger-mime-detect"
 keywords = ["mime", "filetype", "detection", "magic", "content-type"]
 categories = ["filesystem", "web-programming"]
