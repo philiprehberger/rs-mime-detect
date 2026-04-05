@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.0] - 2026-04-05
+
+- Add `detect_from_filename` function for detecting file type from a full filename string
+
 ## 0.1.2 (2026-03-31)
 
 - Standardize README to 3-badge format with emoji Support section

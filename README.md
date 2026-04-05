@@ -10,13 +10,13 @@ File type detection from content (magic bytes), file extension, and MIME type ma
 
 ```toml
 [dependencies]
-philiprehberger-mime-detect = "0.1.1"
+philiprehberger-mime-detect = "0.2.0"
 ```
 
 ## Usage
 
 ```rust
-use philiprehberger_mime_detect::{detect_from_bytes, detect_from_extension, FileKind};
+use philiprehberger_mime_detect::{detect_from_bytes, detect_from_extension, detect_from_filename, FileKind};
 
 // Detect from content
 let png_header = &[0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
@@ -28,6 +28,10 @@ assert!(file_type.is_image());
 // Detect from extension
 let file_type = detect_from_extension("json").unwrap();
 assert_eq!(file_type.mime_type(), "application/json");
+
+// Detect from filename
+let file_type = detect_from_filename("report.pdf").unwrap();
+assert_eq!(file_type.mime_type(), "application/pdf");
 
 // Detect from file path (reads content, falls back to extension)
 let file_type = philiprehberger_mime_detect::detect_from_path("photo.jpg".as_ref());
@@ -48,6 +52,7 @@ assert_eq!(extension_to_mime("html"), Some("text/html"));
 |----------|-------------|
 | `detect_from_bytes(bytes)` | Detect type from magic bytes |
 | `detect_from_extension(ext)` | Detect type from file extension |
+| `detect_from_filename(name)` | Detect type from a filename string |
 | `detect_from_path(path)` | Detect from file (content + extension) |
 | `detect_from_reader(reader, limit)` | Detect from a reader |
 | `mime_to_extension(mime)` | Get default extension for MIME type |

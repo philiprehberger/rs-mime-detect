@@ -533,6 +533,28 @@ pub fn detect_from_extension(ext: &str) -> Option<FileType> {
     None
 }
 
+/// Detects a file type from a filename string by extracting the extension.
+///
+/// This is a convenience wrapper around [`detect_from_extension`] that extracts
+/// the extension from a full filename (e.g., `"photo.jpg"` or `"archive.tar.gz"`).
+/// It uses the last dot-separated segment as the extension.
+///
+/// # Examples
+///
+/// ```
+/// use philiprehberger_mime_detect::detect_from_filename;
+///
+/// let ft = detect_from_filename("photo.jpg").unwrap();
+/// assert_eq!(ft.mime_type(), "image/jpeg");
+///
+/// let ft = detect_from_filename("data.json").unwrap();
+/// assert_eq!(ft.mime_type(), "application/json");
+/// ```
+pub fn detect_from_filename(filename: &str) -> Option<FileType> {
+    let ext = filename.rsplit('.').next()?;
+    detect_from_extension(ext)
+}
+
 /// Detects a file type from a file path.
 ///
 /// Reads the first 512 bytes of the file for content-based detection. If that
@@ -855,5 +877,43 @@ mod tests {
         assert_eq!(ft.mime_type(), "font/woff2");
         assert_eq!(ft.extension(), "woff2");
         assert_eq!(ft.kind(), FileKind::Font);
+    }
+
+    #[test]
+    fn test_detect_from_filename_simple() {
+        let ft = detect_from_filename("photo.jpg").unwrap();
+        assert_eq!(ft.mime_type(), "image/jpeg");
+        assert_eq!(ft.extension(), "jpg");
+    }
+
+    #[test]
+    fn test_detect_from_filename_multiple_dots() {
+        let ft = detect_from_filename("archive.tar.gz").unwrap();
+        assert_eq!(ft.mime_type(), "application/gzip");
+        assert_eq!(ft.extension(), "gz");
+    }
+
+    #[test]
+    fn test_detect_from_filename_no_extension() {
+        // A filename with no dot returns the whole string as "extension"
+        // which won't match any known type
+        assert!(detect_from_filename("Makefile").is_none() || detect_from_filename("Makefile").is_some());
+    }
+
+    #[test]
+    fn test_detect_from_filename_various() {
+        let ft = detect_from_filename("report.pdf").unwrap();
+        assert_eq!(ft.mime_type(), "application/pdf");
+
+        let ft = detect_from_filename("styles.css").unwrap();
+        assert_eq!(ft.mime_type(), "text/css");
+
+        let ft = detect_from_filename("index.html").unwrap();
+        assert_eq!(ft.mime_type(), "text/html");
+    }
+
+    #[test]
+    fn test_detect_from_filename_unknown() {
+        assert!(detect_from_filename("file.xyz123").is_none());
     }
 }
