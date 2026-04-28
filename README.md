@@ -10,7 +10,7 @@ File type detection from content (magic bytes), file extension, and MIME type ma
 
 ```toml
 [dependencies]
-philiprehberger-mime-detect = "0.2.0"
+philiprehberger-mime-detect = "0.3.0"
 ```
 
 ## Usage
@@ -40,10 +40,14 @@ let file_type = philiprehberger_mime_detect::detect_from_path("photo.jpg".as_ref
 ### MIME type lookups
 
 ```rust
-use philiprehberger_mime_detect::{mime_to_extension, extension_to_mime};
+use philiprehberger_mime_detect::{mime_to_extension, extension_to_mime, all_extensions_for_mime};
 
 assert_eq!(mime_to_extension("image/png"), Some("png"));
 assert_eq!(extension_to_mime("html"), Some("text/html"));
+
+// All known extensions for a MIME type (e.g. jpg + jpeg, mid + midi)
+let exts = all_extensions_for_mime("image/jpeg");
+assert!(exts.contains(&"jpg") && exts.contains(&"jpeg"));
 ```
 
 ## API
@@ -56,7 +60,10 @@ assert_eq!(extension_to_mime("html"), Some("text/html"));
 | `detect_from_path(path)` | Detect from file (content + extension) |
 | `detect_from_reader(reader, limit)` | Detect from a reader |
 | `mime_to_extension(mime)` | Get default extension for MIME type |
+| `all_extensions_for_mime(mime)` | Get every known extension for a MIME type |
 | `extension_to_mime(ext)` | Get MIME type for extension |
+| `FileType::is_image/is_video/is_audio/is_archive/is_text` | Category checks for common kinds |
+| `FileType::is_document/is_font/is_executable` | Category checks for the remaining kinds |
 
 ## Development
 

@@ -1,6 +1,12 @@
 # Changelog
 
-## [0.2.0] - 2026-04-05
+## 0.3.0 (2026-04-27)
+
+- Add `FileType::is_document()`, `is_font()`, and `is_executable()` for category checks parallel to existing `is_image`/`is_video`/`is_audio`/`is_text`/`is_archive`
+- Add `all_extensions_for_mime(mime)` returning every known extension for a MIME type (e.g. `image/jpeg` ⇒ `jpg` and `jpeg`)
+- Standardize CHANGELOG entry format to `## X.Y.Z (YYYY-MM-DD)`
+
+## 0.2.0 (2026-04-05)
 
 - Add `detect_from_filename` function for detecting file type from a full filename string
 

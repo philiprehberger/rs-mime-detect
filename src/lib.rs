@@ -90,6 +90,21 @@ impl FileType {
     pub fn is_archive(&self) -> bool {
         self.kind == FileKind::Archive
     }
+
+    /// Returns `true` if this is a document type.
+    pub fn is_document(&self) -> bool {
+        self.kind == FileKind::Document
+    }
+
+    /// Returns `true` if this is a font type.
+    pub fn is_font(&self) -> bool {
+        self.kind == FileKind::Font
+    }
+
+    /// Returns `true` if this is an executable type.
+    pub fn is_executable(&self) -> bool {
+        self.kind == FileKind::Executable
+    }
 }
 
 struct MagicSignature {
@@ -630,6 +645,34 @@ pub fn mime_to_extension(mime: &str) -> Option<&'static str> {
     None
 }
 
+/// Returns *all* known file extensions for a MIME type, in the order they
+/// appear in the internal mapping.
+///
+/// Use this when a single MIME type maps to multiple equivalent extensions
+/// (for example, `image/jpeg` ⇔ `jpg`/`jpeg`, `audio/midi` ⇔ `mid`/`midi`,
+/// `image/tiff` ⇔ `tiff`/`tif`). [`mime_to_extension`] only returns the
+/// first match.
+///
+/// Returns an empty vector if no extension is known for the MIME type.
+///
+/// # Examples
+///
+/// ```
+/// use philiprehberger_mime_detect::all_extensions_for_mime;
+///
+/// let exts = all_extensions_for_mime("image/jpeg");
+/// assert!(exts.contains(&"jpg"));
+/// assert!(exts.contains(&"jpeg"));
+/// ```
+pub fn all_extensions_for_mime(mime: &str) -> Vec<&'static str> {
+    let mime_lower = mime.to_ascii_lowercase();
+    EXT_MAP
+        .iter()
+        .filter(|entry| entry.mime == mime_lower)
+        .map(|entry| entry.extension)
+        .collect()
+}
+
 /// Returns the MIME type for a file extension.
 ///
 /// The extension can be provided with or without a leading dot, and is
@@ -915,5 +958,56 @@ mod tests {
     #[test]
     fn test_detect_from_filename_unknown() {
         assert!(detect_from_filename("file.xyz123").is_none());
+    }
+
+    #[test]
+    fn test_filekind_is_document() {
+        let ft = detect_from_extension("pdf").unwrap();
+        assert!(ft.is_document());
+        assert!(!ft.is_image());
+        assert!(!ft.is_font());
+        assert!(!ft.is_executable());
+    }
+
+    #[test]
+    fn test_filekind_is_font() {
+        let ft = detect_from_extension("woff").unwrap();
+        assert!(ft.is_font());
+        assert!(!ft.is_document());
+        assert!(!ft.is_executable());
+    }
+
+    #[test]
+    fn test_filekind_is_executable() {
+        let ft = detect_from_extension("wasm").unwrap();
+        assert!(ft.is_executable());
+        assert!(!ft.is_font());
+        assert!(!ft.is_document());
+    }
+
+    #[test]
+    fn test_all_extensions_for_mime_image_jpeg() {
+        let exts = all_extensions_for_mime("image/jpeg");
+        assert!(exts.contains(&"jpg"));
+        assert!(exts.contains(&"jpeg"));
+        assert_eq!(exts.len(), 2);
+    }
+
+    #[test]
+    fn test_all_extensions_for_mime_audio_midi() {
+        let exts = all_extensions_for_mime("audio/midi");
+        assert!(exts.contains(&"mid"));
+        assert!(exts.contains(&"midi"));
+    }
+
+    #[test]
+    fn test_all_extensions_for_mime_unknown() {
+        assert!(all_extensions_for_mime("application/x-not-real").is_empty());
+    }
+
+    #[test]
+    fn test_all_extensions_for_mime_case_insensitive() {
+        let exts = all_extensions_for_mime("IMAGE/PNG");
+        assert!(exts.contains(&"png"));
     }
 }
